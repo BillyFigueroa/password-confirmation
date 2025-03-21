@@ -1,5 +1,4 @@
-import PasswordEntry from './components/password-entry/PasswordEntry'
-import BrandLogo from './components/password-entry/BrandLogo'
+import { BrandLogo, PasswordEntry } from './components/password-entry'
 
 import './App.css'
 
