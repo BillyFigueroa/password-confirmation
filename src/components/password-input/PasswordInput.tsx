@@ -5,7 +5,7 @@ import { type PasswordEntryType } from '../../lib/utilities/schema';
 
 import './PasswordInput.css';
 
-interface PasswordInputProps {
+export interface PasswordInputProps {
   label: string,
   name: keyof PasswordEntryType,
   register: UseFormRegister<PasswordEntryType>,
