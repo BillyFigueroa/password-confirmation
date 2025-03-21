@@ -1,32 +1,25 @@
-import { z } from 'zod'
 import { useForm  } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { passwordSchema, type PasswordEntryType } from '../lib/utilities/schema';
+
 const PasswordEntry = () => {
-  const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={[}\]|:;"'<,>.]).{6,}$/
-
-  const passwordSchema = z.object({
-    password: z.string()
-      .nonempty('Password is required')
-      .min(6, 'Password should be at least 6 characters long')
-      .regex(pwRegex, 'Password should have correct format'),
-    passwordConfirmation: z.string()
-      .nonempty('Password is required')
-      .min(6, 'Password should be at least 6 characters long')
-      .regex(pwRegex, 'Password should have correct format'),
-  }).refine(data => data.password === data.passwordConfirmation, {
-    message: 'Passwords don\'t match',
-    path: ['passwordConfirmation']
-  })
-
-  type PasswordEntryType = z.infer<typeof passwordSchema>
-
-  const { formState: { errors, isSubmitting }, handleSubmit, register } = useForm<PasswordEntryType>({
+  const {
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    register,
+    reset
+  } = useForm<PasswordEntryType>({
     resolver: zodResolver(passwordSchema)
   });
 
-  const handleOnSubmit = (formData: PasswordEntryType) => {
+  const handleOnSubmit = async (formData: PasswordEntryType) => {
+    await new Promise(resolve => setTimeout(resolve, 1500))
+
     console.log('Button clicked', formData);
+
+    // After form has been submitted reset
+    reset()
   }
 
   return (
@@ -76,10 +69,10 @@ const PasswordEntry = () => {
 
           <button
             type="submit"
-            className="flex w-full justify-center rounded-md bg-[#246be8] text-white px-3 py-1.5 text-sm/6 font-semibold shadow-xs hover:bg-[#00539b] focus-visible:outline-2 focus-visible:outline-offset-2 mb-10"
+            className="flex w-full disabled:bg-gray-400 disabled:opacity-50 disabled:text-black disabled:cursor-not-allowed disabled:border-red-400 justify-center rounded-md bg-[#246be8] text-white px-3 py-1.5 text-sm/6 font-semibold shadow-xs hover:bg-[#00539b] focus-visible:outline-2 focus-visible:outline-offset-2 mb-10"
             disabled={isSubmitting}
           >
-            Create password
+            {isSubmitting ? 'Processing...' : 'Create password'}
           </button>
         </form>
       </div>
