@@ -4,7 +4,7 @@ import './App.css'
 
 function App() {
   return (
-    <section className="flex flex-col items-center w-[400px] xl:w-[600px] py-10">
+    <section className="App__container">
       <BrandLogo size="w-44" />
       <PasswordEntry />
     </section>

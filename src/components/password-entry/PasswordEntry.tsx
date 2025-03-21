@@ -1,8 +1,10 @@
 import { useForm  } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { passwordSchema, type PasswordEntryType } from '../lib/utilities/schema';
+import { passwordSchema, type PasswordEntryType } from '../../lib/utilities/schema';
 import { PasswordInput } from '../password-input'
+
+import './PasswordEntry.css';
 
 const PasswordEntry = () => {
   const {
@@ -24,28 +26,30 @@ const PasswordEntry = () => {
   }
 
   return (
-    <div className="flex flex-col w-full items-center">
-      <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Create your account password</h2>
+    <div className="PasswordEntry">
+      <h2 className="PasswordEntry__header">Create your account password</h2>
 
-      <div className="mt-10 w-full">
+      <div className="mt-10">
         <form className="space-y-6" onSubmit={handleSubmit(handleOnSubmit)}>
-          <PasswordInput
-            label="Enter Password"
-            name="password"
-            register={register}
-            errors={errors}
-          />
+          <div>
+            <PasswordInput
+              label="Enter Password"
+              name="password"
+              register={register}
+              errors={errors}
+            />
 
-          <PasswordInput
-            label="Enter Password"
-            name="passwordConfirmation"
-            register={register}
-            errors={errors}
-          />
+            <PasswordInput
+              label="Enter Password"
+              name="passwordConfirmation"
+              register={register}
+              errors={errors}
+            />
+          </div>
 
           <button
             type="submit"
-            className="flex w-full disabled:bg-gray-400 disabled:opacity-50 disabled:text-black disabled:cursor-not-allowed disabled:border-red-400 justify-center rounded-md bg-[#246be8] text-white px-3 py-1.5 text-sm/6 font-semibold shadow-xs hover:bg-[#00539b] focus-visible:outline-2 focus-visible:outline-offset-2 mb-10"
+            className="PasswordEntry__submit-button"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Processing...' : 'Create password'}
