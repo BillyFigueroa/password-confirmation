@@ -1,54 +1,112 @@
-# React + TypeScript + Vite
+# Password Confirmation Component
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, secure password creation and confirmation component built with React, TypeScript, and Zod validation.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project provides a reusable password entry component with real-time validation and confirmation. It ensures passwords meet security requirements and match between the initial entry and confirmation fields. The component includes a toggle for password visibility and provides immediate feedback on validation errors.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Password Validation**: Enforces strong password requirements:
+  - Minimum 6 characters length
+  - At least one lowercase character
+  - At least one uppercase character
+  - At least one number
+  - At least one special character
+  - Password confirmation matching
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
+- **Real-time Feedback**: Displays validation errors as users type
+  
+- **Password Visibility Toggle**: Allows users to show/hide password text
+  
+- **Form Submission Handling**: Includes loading state during submission
+
+## Technologies Used
+
+- **React 19**: For building the user interface
+- **TypeScript**: For type safety and better developer experience
+- **Vite**: For fast development and optimized builds
+- **React Hook Form**: For form state management and validation
+- **Zod**: For schema-based form validation
+- **Tailwind CSS**: For styling components
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/BillyFigueroa/password-confirmation.git
+
+# Navigate to the project directory
+cd password-confirmation
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+## Usage
+
+The main component can be imported and used in your React application:
+
+```tsx
+import { PasswordEntry } from './components/password-entry';
+
+function App() {
+  return (
+    <div className="container">
+      <PasswordEntry />
+    </div>
+  );
+}
+```
+
+## Component Structure
+
+- **PasswordEntry**: Main container component that handles form state and submission
+- **PasswordInput**: Reusable input component with visibility toggle
+- **BrandLogo**: SVG logo component
+
+## Validation Schema
+
+The password validation is handled by Zod with the following rules:
+
+```typescript
+export const passwordSchema = z.object({
+  password: z.string()
+    .nonempty('Password is required')
+    .min(6, 'Password should be at least 6 characters long')
+    .regex(/[a-z]{1,}/, 'Password must contain a lowercase character')
+    .regex(/[A-Z]{1,}/, 'Password must contain an uppercase character')
+    .regex(/\d{1,}/, 'Password must contain a number')
+    .regex(/[!@#$%^&*()_\-+={[}\]|:;"'<,>.]/, 'Password must contain a special character'),
+  passwordConfirmation: z.string()
+    .nonempty('Password is required')
+    .min(6, 'Password should be at least 6 characters long')
+    .regex(/[a-z]{1,}/, 'Password must contain a lowercase character')
+    .regex(/[A-Z]{1,}/, 'Password must contain an uppercase character')
+    .regex(/\d{1,}/, 'Password must contain a number')
+    .regex(/[!@#$%^&*()_\-+={[}\]|:;"'<,>.]/, 'Password must contain a special character')
+}).refine(data => data.password === data.passwordConfirmation, {
+  message: 'Passwords don\'t match',
+  path: ['passwordConfirmation']
 })
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# Run development server
+npm run dev
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Lint code
+npm run lint
 ```
